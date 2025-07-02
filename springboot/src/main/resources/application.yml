@@ -3,9 +3,9 @@ spring:
     url:
       jdbc:mysql://localhost:3306/xxq?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username:
-      root
+      your_username
     password:
-      wangzibin666
+      your_password
     driver-class-name:
       com.mysql.cj.jdbc.Driver
 
