@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url:
+      jdbc:mysql://localhost:3306/xxq?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    username:
+      root
+    password:
+      wangzibin666
+    driver-class-name:
+      com.mysql.cj.jdbc.Driver
+
+# 配置mybatis实体和xml映射
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: wzb.springboot.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  
+# 设置 Spring Boot 应用的启动端口为 9099
+server:
+  port:
+    9099

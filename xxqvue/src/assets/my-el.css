@@ -1,0 +1,30 @@
+:root {
+    --el-color-primary: #058d91 !important;
+    --el-color-secondary: #1ad5db !important;
+    --el-color-success: #00ffc4 !important;
+    --el-color-warning: #ffbd07 !important;
+    --el-color-error: #fc32b2 !important;
+    --el-color-warning-light: #eb5fda !important;
+    --el-color-danger: #eb3b70 !important;
+
+    --el-button-active-bg: #00ffc4 !important;
+    --el-button-active-color: #00ffc4 !important;
+    --el-button-active-bg-color: #00ffc4 !important;
+    --el-button-active-text-color: #0b4953 !important;
+}
+
+.el-row {
+    margin-bottom: 20px;
+}
+
+.el-menu {
+    border-radius: 10px;
+}
+
+.el-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #0b4953; /* 可选：设置footer背景颜色 */
+}
