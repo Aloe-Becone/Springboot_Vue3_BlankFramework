@@ -68,7 +68,7 @@
         </el-form-item>
 
         <!-- 个人信息 -->
-        <el-form-item label="备注" prop="info">
+        <el-form-item label="个人简介" prop="info">
           <el-input
               v-model="studentForm.info"
               autosize

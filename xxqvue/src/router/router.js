@@ -3,7 +3,7 @@ import {createRouter, createWebHistory} from "vue-router";
 import login from '../views/login.vue';
 import index from '../views/index.vue';
 import view1 from '../views/user/view1.vue';
-import view2 from '../views/user/view2.vue';
+import comment from '../views/user/comment.vue';
 import myInfo from '../views/user/myInfo.vue';
 
 
@@ -31,8 +31,8 @@ const routes =
         meta: { requiredRole: 'USER' },
       },
       {
-        path: '/index/view2',
-        component: view2,
+        path: '/index/comment',
+        component: comment,
         meta: { requiredRole: 'USER' },
       },
       {
@@ -68,5 +68,6 @@ router.beforeEach((to, from, next) => {
     next('/login');
   }
 });
+
 // 导出router实例，以便在main.js中使用
 export default router;
