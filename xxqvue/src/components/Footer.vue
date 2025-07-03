@@ -1,8 +1,8 @@
 <template >
   <el-footer class="app-footer">
     <div class="footer-content">
-      <div class="copyright">
-        &copy; 2025 王梓镔小学期实训项目. 保留所有权利.
+      <div class="copyright" >
+        <p class="ps-foot-text">&copy; 2025 王梓镔小学期实训项目. 保留所有权利.</p>
       </div>
       <div class="links">
         <el-link type="info" :underline="false" href="#">关于我们</el-link>

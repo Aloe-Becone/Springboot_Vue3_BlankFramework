@@ -5,7 +5,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import wzb.springboot.entity.User;
 import wzb.springboot.mapper.UserMapper;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,6 +34,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             // 如果没拿到，从参数里再拿一次
             token = request.getParameter("token");
         }
+        System.out.println(token);
 
         // 2. 开始执行认证
         if (ObjectUtil.isEmpty(token))    // 空token时

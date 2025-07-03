@@ -1,4 +1,4 @@
-package wzb.springboot.common;
+package wzb.springboot.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

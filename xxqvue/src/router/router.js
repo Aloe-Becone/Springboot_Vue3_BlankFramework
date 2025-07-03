@@ -1,43 +1,46 @@
 import {createRouter, createWebHistory} from "vue-router";
 
+import login from '../views/login.vue';
 import index from '../views/index.vue';
-import view1 from '../views/view1.vue';
-import view2 from '../views/view2.vue';
-import view3 from '../views/view3.vue';
+import view1 from '../views/user/view1.vue';
+import view2 from '../views/user/view2.vue';
+import myInfo from '../views/user/myInfo.vue';
 
 
 // 创建路由对象
-const routes = [
+const routes =
+[
   {
     path: '/', // URL路径
-      redirect: '/wzb/index',
+    redirect: '/login',
   },
   {
-    path: '/wzb/index',
+    path: '/login',
+    component: login,
+  },
+  {
+    path: '/index',
     component: index,
-    meta: { title: '首页' }, // 设置标题
-
-    // children: [
-    // {
-    //   path: '/Guestbook/NULL',
-    //   component: NULL,
-	// },
-	// ],
-  },
-  {
-    path: '/wzb/view1',
-    component: view1,
-    meta: { title: 'view1' },
-  },
-  {
-    path: '/wzb/view2',
-    component: view2,
-    meta: { title: 'view2' },
-  },
-  {
-    path: '/wzb/view3',
-    component: view3,
-    meta: { title: 'view3' },
+    redirect: '/index/view1',
+    meta: { requiredRole: 'USER' },
+    children:
+    [
+      {
+        path: '/index/view1',
+        component: view1,
+        meta: { requiredRole: 'USER' },
+      },
+      {
+        path: '/index/view2',
+        component: view2,
+        meta: { requiredRole: 'USER' },
+      },
+      {
+        path: '/index/myInfo',
+        component: myInfo,
+        meta: { requiredRole: 'USER' },
+      },
+	],
   },
 ];
 
@@ -47,5 +50,23 @@ const router = createRouter({
   routes
 });
 
+router.beforeEach((to, from, next) => {
+  // 1. 同步获取用户信息
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userRole = user.role;
+
+  // 2. 公共路由放行
+  if (!to.meta.requiredRole) {
+    next();
+    return; // 明确终止执行
+  }
+
+  // 3. 角色验证
+  if (userRole === to.meta.requiredRole) {
+    next();
+  } else {
+    next('/login');
+  }
+});
 // 导出router实例，以便在main.js中使用
 export default router;
