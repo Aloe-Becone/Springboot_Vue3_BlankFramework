@@ -14,5 +14,5 @@ public class Post {
 
     private String images;
 
-    private Integer like;
+    private Integer likeCount;
 }

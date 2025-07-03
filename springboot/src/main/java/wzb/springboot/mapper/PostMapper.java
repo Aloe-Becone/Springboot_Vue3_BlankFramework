@@ -19,8 +19,8 @@ public interface PostMapper {
     List<Post> selectAllPosts();
 
     // 添加帖子
-    @Insert("INSERT INTO post (user_id, title, content, images, like) " +
-            "VALUES (#{userId}, #{title}, #{content}, #{images}, #{like})")
+    @Insert("INSERT INTO post (user_id, title, content, images, like_count) " +
+            "VALUES (#{userId}, #{title}, #{content}, #{images}, #{likeCount})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addPost(Post post);
 
@@ -34,11 +34,11 @@ public interface PostMapper {
             "title = #{title}, " +
             "content = #{content}, " +
             "images = #{images}, " +
-            "like = #{like} " +
+            "like_count = #{likeCount} " +
             "WHERE id = #{id}")
-    int updatePost(Post post);
+    void updatePost(Post post);
 
     // 更新点赞数
-    @Update("UPDATE post SET like = #{like} WHERE id = #{id}")
-    int updateLikeCount(@Param("id") Integer id, @Param("like") Integer like);
+    @Update("UPDATE post SET like_count = #{likeCount} WHERE id = #{id}")
+    void updateLikeCount(@Param("id") Integer id, @Param("like") Integer like);
 }

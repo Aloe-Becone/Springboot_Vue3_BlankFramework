@@ -16,7 +16,7 @@ public class CommentController {
     CommentMapper commentMapper;
 
     // 获取帖子所有评论
-    @GetMapping("/get/{postId}")
+    @RequestMapping ("/get/{postId}")
     public Result getComments(@PathVariable Integer postId)
     {
         List<Comment> comments = commentMapper.selectByPostId(postId);
@@ -24,7 +24,7 @@ public class CommentController {
     }
 
     //删除评论
-    @GetMapping("/delete/{commentId}")
+    @RequestMapping("/delete/{commentId}")
     public Result deleteComments(@PathVariable Integer commentId)
     {
         try {
@@ -38,7 +38,7 @@ public class CommentController {
     }
 
     // 添加评论
-    @PostMapping("/creat")
+    @RequestMapping("/creat")
     public Result createComment(@RequestBody Comment comment)
     {
         try {

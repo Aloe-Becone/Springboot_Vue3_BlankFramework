@@ -15,7 +15,7 @@ public class PostController {
     PostMapper postMapper;
 
     // 获取所有帖子
-    @GetMapping("/get")
+    @RequestMapping("/get")
     public Result getPosts()
     {
         List<Post> posts = postMapper.selectAllPosts();
@@ -23,7 +23,7 @@ public class PostController {
     }
 
     // 获取所有用户帖子
-    @GetMapping("/get/{userId}")
+    @RequestMapping("/get/{userId}")
     public Result getPosts(@PathVariable Integer userId)
     {
         List<Post> posts = postMapper.selectByUserId(userId);
@@ -31,7 +31,7 @@ public class PostController {
     }
 
     // 获取指定ID帖子
-    @GetMapping("/get/{postId}")
+    @RequestMapping("/get/{postId}")
     public Result getPost(@PathVariable Integer postId)
     {
         Post post = postMapper.selectById(postId);
@@ -39,7 +39,7 @@ public class PostController {
     }
 
     //删除帖子
-    @GetMapping("/delete/{postId}")
+    @RequestMapping("/delete/{postId}")
     public Result deletePosts(@PathVariable Integer postId)
     {
         try {
@@ -53,11 +53,39 @@ public class PostController {
     }
 
     // 添加帖子
-    @PostMapping("/creat")
+    @RequestMapping("/creat")
     public Result createPost(@RequestBody Post post)
     {
         try {
             postMapper.addPost(post);
+            return Result.success();
+        }
+        catch (Exception e){
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
+        }
+
+    }
+    
+    // 更新帖子
+    @RequestMapping("/update")
+    public Result updatePost(@RequestBody Post post)
+    {
+        try {
+            postMapper.updatePost(post);
+            return Result.success();
+        }
+        catch (Exception e){
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
+        }
+
+    }
+
+    // 更新帖子
+    @RequestMapping("/like/{postId}/{likeCount}")
+    public Result likePost(@PathVariable Integer postId, @PathVariable Integer likeCount)
+    {
+        try {
+            postMapper.updateLikeCount(postId, likeCount);
             return Result.success();
         }
         catch (Exception e){

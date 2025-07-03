@@ -1,0 +1,205 @@
+.forum-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.post-list-card {
+    margin-bottom: 20px;
+}
+
+.post-item {
+    padding: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+    border-bottom: 1px solid #eee;
+}
+
+.post-item:hover {
+    background-color: #f5f7fa;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+.post-header .username {
+    margin: 0 10px;
+    color: #333;
+    font-weight: 500;
+}
+
+.post-header .post-time {
+    margin-right: 10px;
+}
+
+.post-title {
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.post-content-preview {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.post-media-preview {
+    margin: 15px 0;
+    display: flex;
+    gap: 10px;
+}
+
+.media-thumbnail {
+    width: 120px;
+    height: 120px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.post-footer {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.action-item {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.action-item:hover {
+    color: #409eff;
+}
+
+.action-item .el-icon {
+    margin-right: 5px;
+}
+
+.loading-container {
+    padding: 20px;
+}
+
+/* 帖子详情样式 */
+.post-detail-card {
+    margin-bottom: 20px;
+}
+
+.post-detail {
+    padding: 20px;
+}
+
+.post-detail .post-title {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.post-content {
+    line-height: 1.8;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.post-media {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.media-item {
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.post-actions {
+    margin: 30px 0;
+    padding: 15px 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+/* 评论区域样式 */
+.comment-section {
+    margin-top: 30px;
+}
+
+.comment-title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.comment-input {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.comment-input .el-avatar {
+    margin-top: 5px;
+}
+
+.comment-input .el-textarea {
+    flex: 1;
+}
+
+.comment-list {
+    margin-top: 20px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.comment-header .username {
+    font-weight: bold;
+}
+
+.comment-header .time {
+    color: #999;
+    font-size: 12px;
+}
+
+.comment-body {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
