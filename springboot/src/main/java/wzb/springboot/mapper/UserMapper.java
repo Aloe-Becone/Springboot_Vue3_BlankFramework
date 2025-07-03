@@ -19,7 +19,8 @@ public interface UserMapper {
     List<User> selectAllUser();
 
     // 添加用户
-    @Insert("INSERT INTO user (username, password, role) VALUES (#{username}, #{password}, #{role})")
+    @Insert("INSERT INTO user (username, password, role) " +
+            "VALUES (#{username}, #{password}, #{role})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addUser(User user);
 

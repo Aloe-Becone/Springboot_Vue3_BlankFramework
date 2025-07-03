@@ -15,7 +15,7 @@ public class PostController {
     PostMapper postMapper;
 
     // 获取所有帖子
-    @RequestMapping("/get")
+    @RequestMapping("/getAll")
     public Result getPosts()
     {
         List<Post> posts = postMapper.selectAllPosts();
@@ -23,7 +23,7 @@ public class PostController {
     }
 
     // 获取所有用户帖子
-    @RequestMapping("/get/{userId}")
+    @RequestMapping("/getUserPost/{userId}")
     public Result getPosts(@PathVariable Integer userId)
     {
         List<Post> posts = postMapper.selectByUserId(userId);
@@ -31,7 +31,7 @@ public class PostController {
     }
 
     // 获取指定ID帖子
-    @RequestMapping("/get/{postId}")
+    @RequestMapping("/getPost/{postId}")
     public Result getPost(@PathVariable Integer postId)
     {
         Post post = postMapper.selectById(postId);
@@ -47,6 +47,7 @@ public class PostController {
             return Result.success();
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             return Result.error(ResultCodeEnum.SYSTEM_ERROR);
         }
 
@@ -56,11 +57,13 @@ public class PostController {
     @RequestMapping("/creat")
     public Result createPost(@RequestBody Post post)
     {
+        System.out.println(post.getTitle());
         try {
             postMapper.addPost(post);
             return Result.success();
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             return Result.error(ResultCodeEnum.SYSTEM_ERROR);
         }
 
@@ -75,6 +78,7 @@ public class PostController {
             return Result.success();
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             return Result.error(ResultCodeEnum.SYSTEM_ERROR);
         }
 
@@ -89,6 +93,7 @@ public class PostController {
             return Result.success();
         }
         catch (Exception e){
+            System.out.println(e.getMessage());
             return Result.error(ResultCodeEnum.SYSTEM_ERROR);
         }
 

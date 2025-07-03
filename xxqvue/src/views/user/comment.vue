@@ -58,7 +58,7 @@
         </div>
       </template>
 
-      <div v-if="currentPost" class="post-detail">
+      <div class="post-detail">
         <div class="post-header">
           <span class="username">{{ $user.name }}</span>
         </div>
@@ -90,7 +90,7 @@
           <h3 class="comment-title">评论 ({{ comments.length }})</h3>
 
           <div class="comment-input">
-            <el-avatar :src="currentUser.avatar" size="small" />
+<!--            <el-avatar :src="currentUser.avatar" size="small" />-->
             <el-input
                 v-model="commentText"
                 :rows="3"
@@ -105,7 +105,7 @@
 
           <div class="comment-list">
             <div v-for="comment in comments" :key="comment.id" class="comment-item">
-              <el-avatar :src="getUserAvatar(comment.userId)" size="small" />
+<!--              <el-avatar :src="getUserAvatar(comment.userId)" size="small" />-->
               <div class="comment-content">
                 <div class="comment-header">
                   <span class="username">{{ $user.name }}</span>
@@ -118,7 +118,7 @@
       </div>
     </el-card>
 
-    <!-- 发帖对话框 -->
+    <!-- 发帖对话框 f -->
     <el-dialog v-model="showCreateDialog" title="发表新帖" width="800px">
       <el-form :model="newPost" label-width="80px">
         <el-form-item label="标题" prop="title">
@@ -172,6 +172,7 @@ const commentText = ref('')
 // 发帖对话框
 const showCreateDialog = ref(false)
 const newPost = ref({
+  userId: $user.id,
   title: '',
   content: '',
   images: ''
@@ -189,12 +190,23 @@ const createPost = async () => {
   }
 
   try {
+    console.log(newPost.value)
     await $request.post('/post/creat', newPost.value).then(res =>{
-      showCreateDialog.value = false
-      newPost.value = { title: '', content: '', images: '' }
-      fileList.value = []
-      loadPosts()
-      ElMessage.success('帖子发表成功')
+      if (res.data.code === '200') {
+        showCreateDialog.value = false
+        newPost.value = { title: '', content: '', images: '' }
+        fileList.value = []
+        loadPosts()
+        ElMessage.success('帖子发表成功')
+      }
+      else {
+        // 发送失败
+        ElMessage({
+          message: res.data.msg,
+          type: 'error',
+        })
+      }
+
     })
   } catch (error) {
     ElMessage.error('帖子发表失败')
@@ -205,7 +217,7 @@ const createPost = async () => {
 const loadPosts = async () => {
   try {
     loading.value = true
-    $request.get('/post/get', {}).then(res => {
+    $request.get('/post/getAll', {}).then(res => {
       if (res.data.code === '200') {
         posts.value = res.data.data
       } else {
@@ -225,14 +237,13 @@ const loadPosts = async () => {
 // 查看帖子详情
 const viewPostDetail = (postId) => {
   try {
-    $request.get(`/post/get/${postId}`).then(res => {
-      currentPost.value = res.data.data
+    $request.get(`/post/getPost/${postId}`).then(res => {
+      if (res.data.code === '200') {
+        currentPost.value = res.data.data
+      } else {
+        ElMessage.error(res.data.msg)
+      }
     })
-
-    $request.get(`/comment/get/${postId}`).then(res => {
-      comments.value = res.data.data
-    })
-
     showPostDetail.value = true
   } catch (error) {
     ElMessage.error('加载帖子详情失败')
@@ -252,8 +263,12 @@ const toggleLike = async () => {
     currentPost.value.liked = !currentPost.value.liked
     currentPost.value.like += currentPost.value.liked ? 1 : -1
     $request.get(`/post/like/${currentPost.value.id}/${currentPost.value.like}`).then(res => {
-      currentPost.value = res.data.data
-      ElMessage.success(currentPost.value.liked ? '点赞成功' : '已取消点赞')
+      if (res.data.code === '200') {
+        currentPost.value = res.data.data
+        ElMessage.success(currentPost.value.liked ? '点赞成功' : '已取消点赞')
+      } else {
+        ElMessage.error(res.data.msg)
+      }
     })
   } catch (error) {
     ElMessage.error('操作失败')
@@ -273,9 +288,13 @@ const submitComment = async () => {
       postId: currentPost.value.id,
       content: commentText.value
     }).then(res =>{
-      comments.value.unshift(res.data.data)
-      commentText.value = ''
-      ElMessage.success('评论发表成功')
+      if (res.data.code === '200') {
+        comments.value.unshift(res.data.data)
+        commentText.value = ''
+        ElMessage.success('评论发表成功')
+      } else {
+        ElMessage.error(res.data.msg)
+      }
     })
   } catch (error) {
     ElMessage.error('评论发表失败')
@@ -289,6 +308,4 @@ onMounted(() => {
 })
 </script>
 
-<style src="@/assets/comment.css">
-
-</style>
+<style src="@/assets/comment.css"></style>
