@@ -27,12 +27,12 @@
 
           <div v-if="post.imagesList" class="post-media-preview">
             <el-image
-                v-for="img in post.imagesList"
-                :key= img
-                :src= img
+                v-for="(img, index) in post.imagesList"
+                :key="index"
+                :src="$serverURL + img"
                 fit="cover"
                 class="media-thumbnail"
-                :preview-src-list="post.imagesList"
+                :preview-src-list="post.imagesList.map(img => $serverURL + img)"
             ></el-image>
           </div>
 
@@ -59,23 +59,27 @@
 
       <div class="post-detail">
         <div class="post-header">
-          <span class="username">{{ $user.name }}</span>
+          <span class="username"></span>
         </div>
+
+        {{ $user.username }}
 
         <h1 class="post-title">{{ currentPost.title }}</h1>
 
         <div class="post-content" v-html="currentPost.content"></div>
 
-        <div v-if="currentPost.imagesList" class="post-media">
+        <div v-if="currentPost.imagesList" class="post-media-preview">
           <el-image
-              v-for="img in currentPost.imagesList"
-              :key= img
-              :src= img
+              v-for="(img, index) in currentPost.imagesList"
+              :key="index"
+              :src="$serverURL + img"
               fit="cover"
-              class="media-item"
-              :preview-src-list="currentPost.imagesList"
+              class="media-thumbnail"
+              :preview-src-list="currentPost.imagesList.map(img => $serverURL + img)"
           ></el-image>
         </div>
+
+
 
         <div class="post-actions">
           <el-button :type="currentPost.liked ? 'danger' : ''" @click="toggleLike">
@@ -133,7 +137,7 @@
               :action="$serverURL + 'file/upload'"
               list-type="picture-card"
               :file-list="fileList"
-              :limit="9"
+              :limit="3"
               multiple
               :on-success="handleUploadSuccess"
           >
@@ -251,8 +255,12 @@ const loadPosts = async () => {
 // 查看帖子详情
 const viewPostDetail = (postId) => {
   try {
-    $request.get(`/post/getPost/${postId}`).then(res => {
-      if (res.data.code === '200') {
+    console.log("获取帖子详情")
+    $request.get(`/post/getPost/${postId}`).then(res =>
+    {
+      console.log(res.data.data)
+      if (res.data.code === '200')
+      {
         currentPost.value = res.data.data
         console.log(currentPost)
         $request.get(`/comment/get/${postId}`).then(res => {

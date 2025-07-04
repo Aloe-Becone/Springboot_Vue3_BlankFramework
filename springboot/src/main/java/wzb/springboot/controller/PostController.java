@@ -43,20 +43,54 @@ public class PostController {
         }
     }
 
-    // 获取所有用户帖子
+    // 获取用户所有帖子
     @RequestMapping("/getUserPost/{userId}")
     public Result getPosts(@PathVariable Integer userId)
     {
-        List<Post> posts = postMapper.selectByUserId(userId);
-        return Result.success(posts);
+        try {
+            List<Post> posts = postMapper.selectAllPosts();
+
+            // 确保每个Post对象的images字段被正确解析
+            ObjectMapper objectMapper = new ObjectMapper();
+            for (Post post : posts) {
+                if (post.getImages() != null && !post.getImages().isEmpty()) {
+                    // 将数据库中的JSON字符串转换为List<String>
+                    List<String> imagesList = objectMapper.readValue(
+                            post.getImages(),
+                            new TypeReference<>() {}
+                    );
+                    post.setImagesList(imagesList);
+                }
+            }
+            return Result.success(posts);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
+        }
     }
 
     // 获取指定ID帖子
     @RequestMapping("/getPost/{postId}")
     public Result getPost(@PathVariable Integer postId)
     {
-        Post post = postMapper.selectById(postId);
-        return Result.success(post);
+        try {
+            Post post = postMapper.selectById(postId);
+
+            // 确保每个Post对象的images字段被正确解析
+            ObjectMapper objectMapper = new ObjectMapper();
+            if (post.getImages() != null && !post.getImages().isEmpty()) {
+                // 将数据库中的JSON字符串转换为List<String>
+                List<String> imagesList = objectMapper.readValue(
+                        post.getImages(),
+                        new TypeReference<>() {}
+                );
+                post.setImagesList(imagesList);
+            }
+            return Result.success(post);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
+        }
     }
 
     //删除帖子

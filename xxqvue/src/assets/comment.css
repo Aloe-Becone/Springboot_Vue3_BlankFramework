@@ -62,14 +62,17 @@
 .post-media-preview {
     margin: 15px 0;
     display: flex;
+    flex-wrap: wrap; /* 允许换行 */
     gap: 10px;
 }
 
 .media-thumbnail {
-    width: 120px;
-    height: 120px;
-    border-radius: 4px;
-    cursor: pointer;
+    height: 150px; /* 固定高度 */
+    width: auto; /* 宽度自适应 */
+    max-width: 100%; /* 防止图片溢出 */
+    object-fit: cover; /* 保持图片比例 */
+    border-radius: 4px; /* 可选：添加圆角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 可选：添加阴影 */
 }
 
 .post-footer {

@@ -12,11 +12,16 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  web:
+    resources:
+      static-locations: file:./files/
 
 server:
   tomcat:
     max-swallow-size: 100MB
   port: 9099  # 设置 Spring Boot 应用的启动端口为 9099
+
+
 
 
 # 配置mybatis实体和xml映射
@@ -26,4 +31,3 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
-

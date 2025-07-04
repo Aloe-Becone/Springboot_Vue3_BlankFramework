@@ -20,12 +20,6 @@ public class FileController {
     // 文件上传存储路径
     private static final String filePath = System.getProperty("user.dir") + "/files/";
 
-    @Value("${server.port:9099}")
-    private String port;
-
-    @Value("${ip:localhost}")
-    private String ip;
-
     // 文件上传
     @PostMapping("/upload")
     public Result upload(MultipartFile file) {
@@ -46,8 +40,7 @@ public class FileController {
         } catch (Exception e) {
             System.err.println(fileName + "--文件上传失败");
         }
-        String http = "http://" + ip + ":" + port + "/files/";
-        return Result.success(http + flag + "-" + fileName);
+        return Result.success(flag + "-" + fileName);
     }
 
 
