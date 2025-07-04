@@ -40,5 +40,5 @@ public interface PostMapper {
 
     // 更新点赞数
     @Update("UPDATE post SET like_count = #{likeCount} WHERE id = #{id}")
-    void updateLikeCount(@Param("id") Integer id, @Param("like") Integer like);
+    void updateLikeCount(@Param("id") Integer id, @Param("likeCount") Integer likeCount);
 }

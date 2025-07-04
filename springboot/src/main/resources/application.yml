@@ -8,6 +8,16 @@ spring:
       wangzibin666
     driver-class-name:
       com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+server:
+  tomcat:
+    max-swallow-size: 100MB
+  port: 9099  # 设置 Spring Boot 应用的启动端口为 9099
+
 
 # 配置mybatis实体和xml映射
 mybatis:
@@ -16,8 +26,4 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     map-underscore-to-camel-case: true
-  
-# 设置 Spring Boot 应用的启动端口为 9099
-server:
-  port:
-    9099
+

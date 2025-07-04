@@ -25,22 +25,21 @@
             {{ post.content.substring(0, 100) }}{{ post.content.length > 100 ? '...' : '' }}
           </div>
 
-          <div v-if="post.images" class="post-media-preview">
+          <div v-if="post.imagesList" class="post-media-preview">
             <el-image
-                v-for="(img, index) in post.images.split(',')"
-                v-if="index < 3"
-                :key="index"
-                :src="img"
+                v-for="img in post.imagesList"
+                :key= img
+                :src= img
                 fit="cover"
                 class="media-thumbnail"
-                :preview-src-list="post.images.split(',')"
+                :preview-src-list="post.imagesList"
             ></el-image>
           </div>
 
           <div class="post-footer">
             <span class="action-item">
-              <el-icon><VideoPlay /></el-icon>
-              {{ post.like || 0 }}
+              <el-icon><Star /></el-icon>
+              {{ post.likeCount }}
             </span>
           </div>
         </div>
@@ -67,21 +66,21 @@
 
         <div class="post-content" v-html="currentPost.content"></div>
 
-        <div v-if="currentPost.images" class="post-media">
+        <div v-if="currentPost.imagesList" class="post-media">
           <el-image
-              v-for="(img, index) in currentPost.images.split(',')"
-              :key="index"
-              :src="img"
+              v-for="img in currentPost.imagesList"
+              :key= img
+              :src= img
               fit="cover"
               class="media-item"
-              :preview-src-list="currentPost.images.split(',')"
+              :preview-src-list="currentPost.imagesList"
           ></el-image>
         </div>
 
         <div class="post-actions">
           <el-button :type="currentPost.liked ? 'danger' : ''" @click="toggleLike">
-            <el-icon><VideoPlay /></el-icon>
-            {{ currentPost.liked ? '已赞' : '点赞' }} ({{ currentPost.like || 0 }})
+            <el-icon><Star/></el-icon>
+            {{ currentPost.liked ? ' 已赞' : ' 点赞' }} ( {{ currentPost.likeCount}} )
           </el-button>
         </div>
 
@@ -131,13 +130,12 @@
 
         <el-form-item label="上传图片">
           <el-upload
-              action="/api/upload"
+              :action="$serverURL + 'file/upload'"
               list-type="picture-card"
               :file-list="fileList"
-              :on-success="handleUploadSuccess"
-              :on-remove="handleRemove"
               :limit="9"
               multiple
+              :on-success="handleUploadSuccess"
           >
             <el-icon><Plus /></el-icon>
           </el-upload>
@@ -154,12 +152,13 @@
 
 <script setup>
 import { ref, onMounted, inject } from 'vue'
-import { ArrowLeft, ChatDotRound, VideoPlay, Plus } from '@element-plus/icons-vue'
+import { ArrowLeft, Star, VideoPlay, Plus } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 // 当前用户信息
 const $user = inject("$user")
 const $request = inject('$request')
+const $serverURL = inject('$serverURL')
 
 // 帖子列表数据
 const posts = ref([])
@@ -175,12 +174,26 @@ const newPost = ref({
   userId: $user.id,
   title: '',
   content: '',
-  images: ''
+  imagesList: []
 })
 const fileList = ref([])
 
-// 用户数据缓存
-const usersCache = ref({})
+// 上传成功回调
+const handleUploadSuccess = (response, file, fileList) =>
+{
+  console.log('上传成功，后端返回:', response)
+  console.log('上传的文件:', file)
+  console.log('当前文件列表:', fileList)
+
+  if(response.code === '200')
+  {
+    ElMessage.success('上传成功')
+    // 可以将返回的数据保存到组件data中
+    newPost.value.imagesList.push(response.data)
+
+    console.log(newPost.value.imagesList)
+  }
+}
 
 // 创建新帖
 const createPost = async () => {
@@ -194,7 +207,7 @@ const createPost = async () => {
     await $request.post('/post/creat', newPost.value).then(res =>{
       if (res.data.code === '200') {
         showCreateDialog.value = false
-        newPost.value = { title: '', content: '', images: '' }
+        newPost.value = { title: '', content: '', imagesList: [] }
         fileList.value = []
         loadPosts()
         ElMessage.success('帖子发表成功')
@@ -219,6 +232,7 @@ const loadPosts = async () => {
     loading.value = true
     $request.get('/post/getAll', {}).then(res => {
       if (res.data.code === '200') {
+        console.log(res.data.data)
         posts.value = res.data.data
       } else {
         ElMessage.error(res.data.msg)
@@ -240,6 +254,15 @@ const viewPostDetail = (postId) => {
     $request.get(`/post/getPost/${postId}`).then(res => {
       if (res.data.code === '200') {
         currentPost.value = res.data.data
+        console.log(currentPost)
+        $request.get(`/comment/get/${postId}`).then(res => {
+          if (res.data.code === '200') {
+            comments.value = res.data.data
+            console.log(comments)
+          } else {
+            ElMessage.error(res.data.msg)
+          }
+        })
       } else {
         ElMessage.error(res.data.msg)
       }
@@ -260,18 +283,23 @@ const backToList = () => {
 // 点赞帖子
 const toggleLike = async () => {
   try {
-    currentPost.value.liked = !currentPost.value.liked
-    currentPost.value.like += currentPost.value.liked ? 1 : -1
-    $request.get(`/post/like/${currentPost.value.id}/${currentPost.value.like}`).then(res => {
+    const newLikeStatus = !currentPost.value.liked;
+    const newLikeCount = newLikeStatus
+        ? currentPost.value.likeCount + 1
+        : currentPost.value.likeCount - 1;
+
+    await $request.get(`/post/like/${currentPost.value.id}/${newLikeCount}`).then(res => {
       if (res.data.code === '200') {
-        currentPost.value = res.data.data
-        ElMessage.success(currentPost.value.liked ? '点赞成功' : '已取消点赞')
+        currentPost.value.liked = newLikeStatus;
+        currentPost.value.likeCount = newLikeCount;
+        ElMessage.success(newLikeStatus ? '点赞成功' : '已取消点赞');
       } else {
-        ElMessage.error(res.data.msg)
+        ElMessage.error(res.data.msg);
       }
-    })
+    });
   } catch (error) {
-    ElMessage.error('操作失败')
+    ElMessage.error('操作失败');
+    console.error(error);
   }
 }
 
@@ -289,9 +317,10 @@ const submitComment = async () => {
       content: commentText.value
     }).then(res =>{
       if (res.data.code === '200') {
+        ElMessage.success('评论发表成功')
         comments.value.unshift(res.data.data)
         commentText.value = ''
-        ElMessage.success('评论发表成功')
+        viewPostDetail(currentPost.value.id)
       } else {
         ElMessage.error(res.data.msg)
       }
