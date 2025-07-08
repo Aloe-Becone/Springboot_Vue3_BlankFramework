@@ -1,11 +1,17 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
+  /* 主色调 */
+
+  --el-color-primary: var(--vt-c-black-soft); /* #0b4953 */
+  --el-color-primary-light-3: var(--vt-c-black-mute); /* #00989d */
+  --el-color-primary-light-5: rgba(11, 73, 83, 0.2);
+
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
   --vt-c-white-mute: #f2f2f2;
 
   --vt-c-black: #16373a;
-  --vt-c-black-soft: #0b4953;
+  --vt-c-black-soft: #63d6d6;
   --vt-c-black-mute: #00989d;
 
   --vt-c-indigo: #2c3e50;
@@ -18,7 +24,7 @@
   --vt-c-text-light-1: var(--vt-c-indigo);
   --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
   --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgb(20, 255, 224);
+  --vt-c-text-dark-2: rgb(22, 55, 58);
 }
 
 /* semantic color variables for this project */
@@ -79,7 +85,7 @@ body {
     'Droid Sans',
     'Helvetica Neue',
     sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

@@ -18,11 +18,16 @@ public interface UserMapper {
     @Select("SELECT * FROM user")
     List<User> selectAllUser();
 
-    // 添加用户
-    @Insert("INSERT INTO user (username, password, role) " +
-            "VALUES (#{username}, #{password}, #{role})")
+    @Insert("INSERT INTO user (" +
+            "username, password, role, name, school, " +
+            "number, major, grade, phone, info, sex" +
+            ") VALUES (" +
+            "#{username}, #{password}, #{role}, #{name}, #{school}, " +
+            "#{number}, #{major}, #{grade}, #{phone}, #{info}, #{sex}" +
+            ")")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addUser(User user);
+
 
     // 删除用户
     @Delete("DELETE FROM user WHERE id = #{id}")

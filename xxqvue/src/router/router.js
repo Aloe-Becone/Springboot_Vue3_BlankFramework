@@ -1,11 +1,16 @@
 import {createRouter, createWebHistory} from "vue-router";
 
+// 主界面
 import login from '../views/login.vue';
 import index from '../views/index.vue';
+import admin from '../views/admin.vue';
+// 用户界面
 import view1 from '../views/user/view1.vue';
 import comment from '../views/user/comment.vue';
 import myInfo from '../views/user/myInfo.vue';
-
+// 管理界面
+import userAdmin from '../views/admin/userAdmin.vue';
+import postAdmin from '../views/admin/postAdmin.vue';
 
 // 创建路由对象
 const routes =
@@ -41,6 +46,30 @@ const routes =
         meta: { requiredRole: 'USER' },
       },
 	],
+  },
+  {
+    path: '/admin',
+    component: admin,
+    redirect: '/admin/userAdmin',
+    meta: { requiredRole: 'ADMIN' },
+    children:
+        [
+          {
+            path: '/admin/userAdmin',
+            component: userAdmin,
+            meta: { requiredRole: 'ADMIN' },
+          },
+          {
+            path: '/admin/postAdmin',
+            component: postAdmin,
+            meta: { requiredRole: 'ADMIN' },
+          },
+          {
+            path: '/admin/myInfo',
+            component: myInfo,
+            meta: { requiredRole: 'ADMIN' },
+          },
+        ],
   },
 ];
 

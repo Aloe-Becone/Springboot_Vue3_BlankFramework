@@ -24,5 +24,4 @@ public class Post {
 
     private Integer likeCount = 0;
 
-
 }

@@ -18,9 +18,7 @@ public class UserController {
     UserMapper userMapper;
 
     @RequestMapping("/reg")
-    public Result submit(@RequestBody User user) {
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
+    public Result reg(@RequestBody User user) {
         User reg_user = userMapper.selectByUsername(user.getUsername());
         if (Objects.isNull(reg_user))  // 用户名未注册
         {
@@ -62,6 +60,19 @@ public class UserController {
         else    // 用户不存在
         {
             return Result.error(ResultCodeEnum.USER_DONT_EXIT);
+        }
+    }
+
+    @RequestMapping("/add")
+    public Result add(@RequestBody User user) {
+        User reg_user = userMapper.selectByUsername(user.getUsername());
+        if (Objects.isNull(reg_user))  // 用户名未注册
+        {
+            userMapper.addUser(user);
+            return Result.success();
+        }
+        else {
+            return Result.error(ResultCodeEnum.USER_HAD_EXIT);
         }
     }
 

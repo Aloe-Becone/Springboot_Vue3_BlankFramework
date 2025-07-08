@@ -11,14 +11,62 @@
     --el-button-active-color: #00ffc4 !important;
     --el-button-active-bg-color: #00ffc4 !important;
     --el-button-active-text-color: #0b4953 !important;
+
+    --el-button-hover-bg: #00ffc4 !important;
+    --el-button-hover-text-color: #00ffc4 !important;
 }
 
 .el-row {
     margin-bottom: 20px;
 }
 
+/**
+ * Element Plus 菜单组件全局样式覆写
+ * 基于项目自定义颜色变量系统 (--vt-c-*)
+ */
+
+/* 基础菜单容器样式 */
 .el-menu {
-    border-radius: 10px;
+    /* 菜单背景色 */
+    --el-menu-bg-color: var(--vt-c-white-mute);
+
+    /* 激活状态文字颜色 */
+    --el-menu-active-color: var(--vt-c-white);
+
+    /* 菜单项悬停文字颜色 */
+    --el-menu-hover-text-color: var(--vt-c-black-soft);
+}
+
+
+/* 菜单项悬停效果 */
+.el-menu-item:not(.is-active):hover {
+    background-color: var(--el-menu-hover-bg-color) !important;
+    color: var(--el-menu-hover-text-color) !important;
+}
+
+/* 基础菜单项样式 */
+.el-menu-item {
+    transition: all 0.3s ease;
+    color: var(--el-menu-text-color);
+}
+
+/*
+ * 暗色模式适配
+ */
+@media (prefers-color-scheme: dark) {
+    .el-menu {
+        /* 暗色模式文字颜色 */
+        --el-menu-text-color: var(--vt-c-text-dark-2);
+
+        /* 暗色模式悬停背景 */
+        --el-menu-hover-bg-color: var(--vt-c-black-mute);
+    }
+
+    /* 暗色模式激活项微调 */
+    .el-menu-item.is-active {
+        /* 使用稍亮的蓝绿色作为激活背景 */
+        background-color: var(--vt-c-black-mute) !important;
+    }
 }
 
 .el-footer {
@@ -26,5 +74,5 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #0b4953; /* 可选：设置footer背景颜色 */
+    background-color: #0b4953;
 }

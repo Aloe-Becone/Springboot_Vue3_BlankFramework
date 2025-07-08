@@ -4,7 +4,6 @@
       <template #header>
         <div class="card-header">
           <span>个人信息管理</span>
-          <el-button type="danger" @click="handleLogout">退出登录</el-button>
         </div>
       </template>
 
@@ -15,6 +14,15 @@
           label-width="120px"
           label-position="top"
       >
+        <!-- 账号信息 -->
+        <el-form-item label="账号名" prop="username">
+          <el-input v-model="studentForm.username" placeholder="请输入账号名" />
+        </el-form-item>
+
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="studentForm.password" placeholder="请输入密码" />
+        </el-form-item>
+
         <!-- 学校信息 -->
         <el-form-item label="学校名称" prop="school">
           <el-input v-model="studentForm.school" placeholder="请输入学校名称" />
@@ -77,18 +85,27 @@
           />
         </el-form-item>
 
+
         <!-- 操作按钮 -->
+        <el-form-item label="身份" prop="role">
+          <el-radio-group v-model="studentForm.role">
+            <el-radio value="ADMIN">管理员</el-radio>
+            <el-radio value="USER">普通用户</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="submitForm">提交信息</el-button>
           <el-button @click="resetForm">重置</el-button>
         </el-form-item>
+
       </el-form>
     </el-card>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted, inject } from 'vue'
+import { ref, reactive, computed, inject } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 
@@ -98,6 +115,9 @@ const $user = inject('$user')
 
 // 表单数据
 const studentForm = reactive({
+  username: '',
+  password: '',
+  role: 'USER',
   school: '',
   name: '',
   number: '',
@@ -105,11 +125,22 @@ const studentForm = reactive({
   grade: '',
   major: '',
   phone: '',
-  info: ''
+  info: '',
 })
+
+// 表单引用
+const formRef = ref(null)
 
 // 表单验证规则
 const rules = reactive({
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'change' },
+    { min: 3, max: 16, message: '长度在3到16个字符', trigger: 'change' }
+  ],
+  password: [
+    { required: true, message: '请输入密码', trigger: 'change' },
+    { min: 6, max: 20, message: '长度在6到20个字符', trigger: 'change' }
+  ],
   school: [{ required: true, message: '请输入学校名称', trigger: 'blur' }],
   name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
   grade: [{ required: true, message: '请选择入学年份', trigger: 'change' }],
@@ -124,29 +155,15 @@ const rules = reactive({
   ]
 })
 
-// 表单引用
-const formRef = ref(null)
 
 // 提交表单
 const submitForm = () => {
   console.log(formRef.value)
   formRef.value?.validate((valid) => {
     if (valid) {
-      $request.post('/user/update', {
-        id: $user.id,
-        name: studentForm.name,
-        number: studentForm.number,
-        school: studentForm.school,
-        sex: studentForm.sex,
-        grade: studentForm.grade,
-        major: studentForm.major,
-        phone: studentForm.phone,
-        info: studentForm.info
-      }).then(res => {
+      $request.post('/user/add', studentForm).then(res => {
         if (res.data.code === '200') {
-          ElMessage.success('修改成功')
-          // 更新原始数据
-          Object.assign(studentForm, res.data.data)
+          ElMessage.success('添加成功')
         } else {
           ElMessage.error(res.data.msg)
         }
@@ -161,35 +178,6 @@ const submitForm = () => {
 const resetForm = () => {
   formRef.value?.resetFields()
 }
-
-// 退出登录
-const handleLogout = () => {
-  ElMessageBox.confirm('确定要退出登录吗？', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning'
-  }).then(() => {
-    localStorage.removeItem('user')
-    ElMessage.success('退出成功')
-    router.push('/login')
-  }).catch(() => {
-    ElMessage.info('已取消退出')
-  })
-}
-
-// 加载已有数据
-onMounted(() => {
-  // 使用模板字符串拼接URL路径参数
-  $request.get(`/user/getInfo/${$user.id}`)
-      .then(res => {
-        if (res.data.code === '200') {
-          Object.assign(studentForm, res.data.data)
-        }
-      })
-      .catch(err => {
-        ElMessage.error('加载用户信息失败')
-      })
-})
 
 </script>
 

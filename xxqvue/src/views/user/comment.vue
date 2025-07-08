@@ -121,7 +121,7 @@
       </div>
     </el-card>
 
-    <!-- 发帖对话框 f -->
+    <!-- 发帖对话框 -->
     <el-dialog v-model="showCreateDialog" title="发表新帖" width="800px">
       <el-form :model="newPost" label-width="80px">
         <el-form-item label="标题" prop="title">

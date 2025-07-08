@@ -1,4 +1,4 @@
-<template style="width:100%; ">
+<template>
   <router-view></router-view>
 </template>
 

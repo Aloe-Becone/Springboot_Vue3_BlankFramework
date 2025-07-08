@@ -11,14 +11,4 @@
   </el-header>
 </template>
 
-<script>
-import {ref, inject} from "vue";
-
-// 注入实例
-const $request = inject('$request');
-
-
-export default {
-  name: 'Header',
-}
-</script>
+<script setup></script>
