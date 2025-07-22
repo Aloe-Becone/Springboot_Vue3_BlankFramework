@@ -76,3 +76,7 @@
     right: 0;
     background-color: #0b4953;
 }
+
+.el-card {
+    z-index: 9999;
+}

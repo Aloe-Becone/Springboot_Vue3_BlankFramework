@@ -2,13 +2,14 @@ package wzb.springboot.controller;
 
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
 
 import wzb.springboot.common.*;
 import wzb.springboot.entity.Comment;
 import wzb.springboot.mapper.CommentMapper;
 
-// CommentController.java
 @RestController
 @RequestMapping("/comment")
 public class CommentController {
@@ -42,6 +43,7 @@ public class CommentController {
     public Result createComment(@RequestBody Comment comment)
     {
         try {
+            comment.setTime(String.valueOf(new Date()));
             commentMapper.addComment(comment);
             return Result.success();
         }

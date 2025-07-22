@@ -7,6 +7,19 @@
         </div>
       </template>
 
+      <div style="display: flex; justify-content: center; margin-bottom: 20px">
+        <el-upload
+            list-type="picture-card"
+            :action="$serverURL + 'file/upload'"
+            :file-list="fileList"
+            :limit="1"
+            :on-success="handleUploadSuccess"
+            :on-remove="handleRemove"
+        >
+          <el-icon><Plus /></el-icon>
+        </el-upload>
+      </div>
+
       <el-form
           ref="formRef"
           :model="studentForm"
@@ -108,16 +121,21 @@
 import { ref, reactive, computed, inject } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
+import {Plus} from "@element-plus/icons-vue";
 
 const router = useRouter()
 const $request = inject('$request')
 const $user = inject('$user')
+const $serverURL = inject('$serverURL')
+
+const fileList = ref([])
 
 // 表单数据
 const studentForm = reactive({
   username: '',
   password: '',
   role: 'USER',
+  avatar: '',
   school: '',
   name: '',
   number: '',
@@ -172,6 +190,19 @@ const submitForm = () => {
       })
     }
   })
+}
+
+// 上传成功处理
+const handleUploadSuccess = (response) => {
+  if (response.code === '200') {
+    studentForm.avatar = response.data
+    ElMessage.success('上传成功')
+  }
+}
+
+// 删除上传图片
+const handleRemove = () => {
+  studentForm.avatar = ''
 }
 
 // 重置表单

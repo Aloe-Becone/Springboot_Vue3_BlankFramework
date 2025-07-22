@@ -4,13 +4,20 @@ import {createRouter, createWebHistory} from "vue-router";
 import login from '../views/login.vue';
 import index from '../views/index.vue';
 import admin from '../views/admin.vue';
+
 // 用户界面
-import view1 from '../views/user/view1.vue';
+import notice from '../views/user/notice.vue';
 import comment from '../views/user/comment.vue';
 import myInfo from '../views/user/myInfo.vue';
+import activity from '../views/user/activity.vue';
+import myActivity from '../views/user/myActivity.vue';
+import myApply from '../views/user/myApply.vue';
+
 // 管理界面
 import userAdmin from '../views/admin/userAdmin.vue';
 import postAdmin from '../views/admin/postAdmin.vue';
+import activityAdmin from '../views/admin/activityAdmin.vue';
+import noticeAdmin from '../views/admin/noticeAdmin.vue';
 
 // 创建路由对象
 const routes =
@@ -26,13 +33,13 @@ const routes =
   {
     path: '/index',
     component: index,
-    redirect: '/index/view1',
+    redirect: '/index/notice',
     meta: { requiredRole: 'USER' },
     children:
     [
       {
-        path: '/index/view1',
-        component: view1,
+        path: '/index/notice',
+        component: notice,
         meta: { requiredRole: 'USER' },
       },
       {
@@ -43,6 +50,21 @@ const routes =
       {
         path: '/index/myInfo',
         component: myInfo,
+        meta: { requiredRole: 'USER' },
+      },
+      {
+        path: '/index/activity',
+        component: activity,
+        meta: { requiredRole: 'USER' },
+      },
+      {
+        path: '/index/myActivity',
+        component: myActivity,
+        meta: { requiredRole: 'USER' },
+      },
+      {
+        path: '/index/myApply',
+        component: myApply,
         meta: { requiredRole: 'USER' },
       },
 	],
@@ -57,6 +79,16 @@ const routes =
           {
             path: '/admin/userAdmin',
             component: userAdmin,
+            meta: { requiredRole: 'ADMIN' },
+          },
+          {
+            path: '/admin/noticeAdmin',
+            component: noticeAdmin,
+            meta: { requiredRole: 'ADMIN' },
+          },
+          {
+            path: '/admin/activityAdmin',
+            component: activityAdmin,
             meta: { requiredRole: 'ADMIN' },
           },
           {

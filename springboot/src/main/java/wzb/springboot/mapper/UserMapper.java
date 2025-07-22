@@ -14,15 +14,19 @@ public interface UserMapper {
     @Select("SELECT * FROM user WHERE username = #{username}")
     User selectByUsername(String username);
 
+    // 获取头像
+    @Select("SELECT avatar FROM user WHERE id = #{id}")
+    String getAvatarById(Integer id);
+
     // 获取用户列表
     @Select("SELECT * FROM user")
     List<User> selectAllUser();
 
     @Insert("INSERT INTO user (" +
-            "username, password, role, name, school, " +
+            "username, password, role, name, avatar, school, " +
             "number, major, grade, phone, info, sex" +
             ") VALUES (" +
-            "#{username}, #{password}, #{role}, #{name}, #{school}, " +
+            "#{username}, #{password}, #{role}, #{name}, #{avatar}, #{school}, " +
             "#{number}, #{major}, #{grade}, #{phone}, #{info}, #{sex}" +
             ")")
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -36,6 +40,7 @@ public interface UserMapper {
     // 修改用户
     @Update("UPDATE user SET " +
             "name = #{name}," +
+            "avatar = #{avatar}," +
             "sex = #{sex}," +
             "school = #{school}," +
             "number = #{number}," +

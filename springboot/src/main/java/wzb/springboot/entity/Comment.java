@@ -11,4 +11,6 @@ public class Comment {
     private Integer postId;
 
     private String content;
+
+    private String time;
 }

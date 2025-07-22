@@ -21,10 +21,6 @@
 
           <h3 class="post-title">{{ post.title }}</h3>
 
-          <div class="post-content-preview">
-            {{ post.content.substring(0, 100) }}{{ post.content.length > 100 ? '...' : '' }}
-          </div>
-
           <div v-if="post.imagesList" class="post-media-preview">
             <el-image
                 v-for="(img, index) in post.imagesList"
@@ -36,10 +32,14 @@
             ></el-image>
           </div>
 
-          <div class="post-footer">
+          <div class="post-footer" style="">
             <span class="action-item">
               <el-icon><Star /></el-icon>
               {{ post.likeCount }}
+            </span>
+            <span class="action-item">
+              <el-icon><Calendar/></el-icon>
+              {{ post.time }}
             </span>
           </div>
         </div>
@@ -58,13 +58,28 @@
       </template>
 
       <div class="post-detail">
-        <div class="post-header">
-          <span class="username"></span>
+        <div class="post-header"
+             style="display: flex; justify-content: space-between; align-items: center">
+          <div style="display: flex; justify-content: left; align-items: center">
+            <span class="action-item">
+              <el-avatar
+                  style="margin-right: 10px"
+                  :src= "currentPosterAvatar"
+              />
+              {{ $user.username }}
+            </span>
+
+          </div>
+          <span class="action-item">
+            <el-icon><Calendar/></el-icon>
+            {{ currentPost.time }}
+          </span>
         </div>
 
-        {{ $user.username }}
+        <el-col :span="18">
+          <h2 class="post-title, px-text">{{ currentPost.title }}</h2>
+        </el-col>
 
-        <h1 class="post-title">{{ currentPost.title }}</h1>
 
         <div class="post-content" v-html="currentPost.content"></div>
 
@@ -90,10 +105,14 @@
 
         <!-- 评论区域 -->
         <div class="comment-section">
-          <h3 class="comment-title">评论 ({{ comments.length }})</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <h3 class="comment-title">评论 ({{ comments.length }})</h3>
+            <div class="action-bar">
+              <el-button type="primary" @click="submitComment">发表评论</el-button>
+            </div>
+          </div>
 
           <div class="comment-input">
-<!--            <el-avatar :src="currentUser.avatar" size="small" />-->
             <el-input
                 v-model="commentText"
                 :rows="3"
@@ -101,17 +120,17 @@
                 placeholder="写下你的评论..."
                 resize="none"
             />
-            <div class="action-bar">
-              <el-button type="primary" size="small" @click="submitComment">发表评论</el-button>
-            </div>
           </div>
 
           <div class="comment-list">
             <div v-for="comment in comments" :key="comment.id" class="comment-item">
-<!--              <el-avatar :src="getUserAvatar(comment.userId)" size="small" />-->
+              <el-avatar :src="comment.avatar" />
               <div class="comment-content">
                 <div class="comment-header">
-                  <span class="username">{{ $user.name }}</span>
+                  <span class="action-item">
+                    <el-icon><Calendar/></el-icon>
+                    {{ comment.time }}
+                  </span>
                 </div>
                 <div class="comment-body">{{ comment.content }}</div>
               </div>
@@ -155,8 +174,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from 'vue'
-import { ArrowLeft, Star, VideoPlay, Plus } from '@element-plus/icons-vue'
+import {ref, onMounted, inject, reactive} from 'vue'
+import {ArrowLeft, Star, VideoPlay, Plus, User, Calendar} from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 
 // 当前用户信息
@@ -169,6 +188,7 @@ const posts = ref([])
 const loading = ref(true)
 const showPostDetail = ref(false)
 const currentPost = ref(null)
+const currentPosterAvatar = ref('')
 const comments = ref([])
 const commentText = ref('')
 
@@ -196,6 +216,25 @@ const handleUploadSuccess = (response, file, fileList) =>
     newPost.value.imagesList.push(response.data)
 
     console.log(newPost.value.imagesList)
+  }
+}
+
+// 把用户 id → 头像 URL 的映射缓存起来
+const avatarCache = reactive({})
+
+// 负责拿头像的异步函数
+const fetchAvatar = async (id) => {
+  if (avatarCache[id]) return avatarCache[id]        // 已缓存直接返回
+  try {
+    const res = await $request.get(`/user/getAvatar/${id}`)
+    const url = res.data.code === '200'
+        ? $serverURL + res.data.data
+        : '/default-avatar.png'                       // 你的默认头像
+    avatarCache[id] = url
+    return url
+  } catch {
+    avatarCache[id] = '/default-avatar.png'
+    return '/default-avatar.png'
   }
 }
 
@@ -252,32 +291,41 @@ const loadPosts = async () => {
   }
 }
 
-// 查看帖子详情
-const viewPostDetail = (postId) => {
+/// 查看帖子详情
+const viewPostDetail = async (postId) => {
   try {
-    console.log("获取帖子详情")
-    $request.get(`/post/getPost/${postId}`).then(res =>
-    {
-      console.log(res.data.data)
-      if (res.data.code === '200')
-      {
-        currentPost.value = res.data.data
-        console.log(currentPost)
-        $request.get(`/comment/get/${postId}`).then(res => {
-          if (res.data.code === '200') {
-            comments.value = res.data.data
-            console.log(comments)
-          } else {
-            ElMessage.error(res.data.msg)
-          }
+    loading.value = true
+
+    // 1. 拿帖子
+    const postRes = await $request.get(`/post/getPost/${postId}`)
+    if (postRes.data.code !== '200') {
+      ElMessage.error(postRes.data.msg)
+      return
+    }
+    currentPost.value = postRes.data.data
+    currentPosterAvatar.value = await fetchAvatar(currentPost.value.userId)
+
+    // 2. 拿评论
+    const commentRes = await $request.get(`/comment/get/${postId}`)
+    if (commentRes.data.code !== '200') {
+      ElMessage.error(commentRes.data.msg)
+      return
+    }
+
+    // 3. 批量把头像写进每条评论
+    const rawComments = commentRes.data.data
+    await Promise.all(
+        rawComments.map(async c => {
+          c.avatar = await fetchAvatar(c.userId)
+          return c
         })
-      } else {
-        ElMessage.error(res.data.msg)
-      }
-    })
+    )
+    comments.value = rawComments
     showPostDetail.value = true
-  } catch (error) {
+  } catch (e) {
     ElMessage.error('加载帖子详情失败')
+  } finally {
+    loading.value = false
   }
 }
 

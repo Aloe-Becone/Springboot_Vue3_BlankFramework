@@ -14,10 +14,13 @@ public class Account {
 
     private String token;
 
-    public Account(Integer id, String username, String role, String token) {
+    private String avatar;
+
+    public Account(Integer id, String username, String role, String avatar, String token) {
         this.id = id;
         this.username = username;
         this.role = role;
+        this.avatar = avatar;
         this.token = token;
     }
 }

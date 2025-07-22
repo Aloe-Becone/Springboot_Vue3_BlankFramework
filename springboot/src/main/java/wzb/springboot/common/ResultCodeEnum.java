@@ -12,6 +12,9 @@ public enum ResultCodeEnum {
     USER_DONT_EXIT("501", "用户不存在"),
     USER_HAD_EXIT("502", "用户已存在"),
     PWD_ERROR("503", "密码错误"),
+
+    APPLY_HAD_EXIT("601", "已申请活动"),
+    APPLY_HAD_DONE("602", "已应审核过啦"),
     ;
 
     public final String code;

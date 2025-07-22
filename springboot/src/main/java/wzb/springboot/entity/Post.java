@@ -14,6 +14,8 @@ public class Post {
 
     private String title;
 
+    private String time;
+
     private String content;
 
     // 以List接收

@@ -12,11 +12,11 @@ import router from "./router/router.js";
 // 使用 createApp 方法创建 Vue 应用实例
 const app = createApp(App);
 
-// 后台服务器ip
-const serverURL = 'http://localhost:9099/';
-
 // 获取缓存的用户信息
 const user = JSON.parse(localStorage.getItem("user") || '{}')
+
+// 后台服务器ip
+const serverURL = 'http://localhost:9099/';
 
 // 创建axios实例
 const axiosInstance = axios.create({
@@ -25,7 +25,6 @@ const axiosInstance = axios.create({
     // 设置超时
     timeout: 1000,
 });
-
 axiosInstance.interceptors.request.use(
     (config) => {
         // 1. 白名单路径
@@ -54,7 +53,6 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
 // 添加响应拦截器，用于处理token过期等情况
 axiosInstance.interceptors.response.use(
     (response) => {
@@ -72,6 +70,7 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error)
     }
 )
+
 
 // 在Vue3中使用provide()进行挂载全局属性，并在子组件中使用inject()方法注入
 // 取代app.config.globalProperties方法(适用于Vue2子组件中使用this获取)

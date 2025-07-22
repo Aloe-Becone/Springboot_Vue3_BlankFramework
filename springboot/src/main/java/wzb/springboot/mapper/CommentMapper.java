@@ -23,8 +23,8 @@ public interface CommentMapper {
     List<Comment> selectAllComments();
 
     // 添加评论
-    @Insert("INSERT INTO comment (user_id, post_id, content) " +
-            "VALUES (#{userId}, #{postId}, #{content})")
+    @Insert("INSERT INTO comment (user_id, post_id, content, time) " +
+            "VALUES (#{userId}, #{postId}, #{content}, #{time})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addComment(Comment comment);
 
@@ -36,7 +36,8 @@ public interface CommentMapper {
     @Update("UPDATE comment SET " +
             "user_id = #{userId}, " +
             "post_id = #{postId}, " +
-            "content = #{content} " +
+            "content = #{content}, " +
+            "time = #{time} " +
             "WHERE id = #{id}")
     int updateComment(Comment comment);
 }

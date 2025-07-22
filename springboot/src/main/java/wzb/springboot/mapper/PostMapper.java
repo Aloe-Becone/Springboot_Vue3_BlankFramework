@@ -19,8 +19,8 @@ public interface PostMapper {
     List<Post> selectAllPosts();
 
     // 添加帖子
-    @Insert("INSERT INTO post (user_id, title, content, images, like_count) " +
-            "VALUES (#{userId}, #{title}, #{content}, #{images}, #{likeCount})")
+    @Insert("INSERT INTO post (user_id, title, content, images, like_count, time) " +
+            "VALUES (#{userId}, #{title}, #{content}, #{images}, #{likeCount}, #{time})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void addPost(Post post);
 
@@ -34,6 +34,7 @@ public interface PostMapper {
             "title = #{title}, " +
             "content = #{content}, " +
             "images = #{images}, " +
+            "time = #{time}, " +
             "like_count = #{likeCount} " +
             "WHERE id = #{id}")
     void updatePost(Post post);

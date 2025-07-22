@@ -5,9 +5,6 @@
         <div class="card-header">
           <span>用户管理</span>
           <div>
-            <el-button type="danger" :disabled="!selectedUsers.length" @click="batchDelete">
-              批量删除
-            </el-button>
             <el-button type="primary" @click="openAddDialog">
               添加用户
             </el-button>
@@ -22,10 +19,18 @@
           border
           stripe
           v-loading="loading"
-          @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column prop="id" label="ID" width="80" />
+        <el-table-column prop="id" label="ID" width="60" />
+        <el-table-column label="头像" width="80">
+          <template #default="{row}">
+            <el-avatar
+                v-if="row.avatar"
+                :src="$serverURL + row.avatar"
+                shape="square"
+                :preview-src-list="[$serverURL + row.avatar]"
+            />
+          </template>
+        </el-table-column>
         <el-table-column prop="username" label="用户名" width="120" />
         <el-table-column prop="name" label="姓名" width="100" />
         <el-table-column prop="sex" label="性别" width="80" />
@@ -97,6 +102,7 @@ import addUser from './addUser.vue'
 // 全局组件
 const $request = inject('$request')
 const $user = inject('$user')
+const $serverURL = inject('$serverURL')
 
 // 用户数据
 const userList = ref([])
@@ -134,10 +140,6 @@ const getUsers = async () => {
   loading.value = false
 }
 
-// 多选处理
-const handleSelectionChange = (selection) => {
-  selectedUsers.value = selection
-}
 
 // 打开编辑对话框
 const openEditDialog = (id) => {
@@ -150,7 +152,6 @@ const openEditDialog = (id) => {
 const openAddDialog = () => {
   addVisible.value = true
 }
-
 
 // 删除用户
 const handleDelete = (id) => {

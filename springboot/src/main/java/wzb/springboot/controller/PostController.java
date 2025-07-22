@@ -4,6 +4,8 @@ import cn.hutool.json.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -117,12 +119,8 @@ public class PostController {
 
         try {
             String jsonString = objectMapper.writeValueAsString(post.getImagesList());
-            String toString = post.getImagesList().toString();
-
-            System.out.println("jsonString: " + jsonString);
-            System.out.println("toString: " + toString);
-
             post.setImages(jsonString);
+            post.setTime(String.valueOf(new Date()));
             postMapper.addPost(post);
             return Result.success();
         }

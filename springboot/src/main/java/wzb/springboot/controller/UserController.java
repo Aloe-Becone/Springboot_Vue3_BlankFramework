@@ -49,6 +49,7 @@ public class UserController {
                         loginUser.getId(),
                         loginUser.getUsername(),
                         loginUser.getRole(),
+                        loginUser.getAvatar(),
                         token);
                 return Result.success(account);
             }
@@ -93,7 +94,12 @@ public class UserController {
     @RequestMapping("/update")
     public Result update(@RequestBody User user) {
         int suss = userMapper.updateUser(user);
-        return Result.success(suss);
+        if (suss == 0){
+            return Result.error(ResultCodeEnum.SYSTEM_ERROR);
+        }
+        else {
+            return Result.success();
+        }
     }
 
     @RequestMapping("/delete/{id}")
@@ -101,4 +107,11 @@ public class UserController {
         userMapper.deleteById(id);
         return Result.success();
     }
+
+    @RequestMapping("/getAvatar/{id}")
+    public Result getAvatar(@PathVariable Integer id) {
+        String avatar = userMapper.getAvatarById(id);
+        return Result.success(avatar);
+    }
+
 }
