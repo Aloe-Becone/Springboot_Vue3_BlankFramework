@@ -45,7 +45,7 @@ public class FileController {
 
 
     // 获取文件
-    @GetMapping("/{flag}")
+    @GetMapping("/get/{flag}")
     public void avatarPath(@PathVariable String flag, HttpServletResponse response) {
         OutputStream os;
         try {
@@ -64,7 +64,7 @@ public class FileController {
     }
 
     // 删除文件
-    @DeleteMapping("/{flag}")
+    @DeleteMapping("/del/{flag}")
     public void delFile(@PathVariable String flag) {
         FileUtil.del(filePath + flag);
         System.out.println("删除文件" + flag + "成功");
