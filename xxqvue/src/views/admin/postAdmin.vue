@@ -58,18 +58,18 @@
       </el-table>
 
       <!-- 分页 -->
-      <div class="pagination-container">
-        <el-pagination
-            v-model:current-page="currentPage"
-            v-model:page-size="pageSize"
-            :page-sizes="[10, 20, 30, 50]"
-            :background="true"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="getPosts"
-            @current-change="getPosts"
-        />
-      </div>
+<!--      <div class="pagination-container">-->
+<!--        <el-pagination-->
+<!--            v-model:current-page="currentPage"-->
+<!--            v-model:page-size="pageSize"-->
+<!--            :page-sizes="[10, 20, 30, 50]"-->
+<!--            :background="true"-->
+<!--            layout="total, sizes, prev, pager, next, jumper"-->
+<!--            :total="total"-->
+<!--            @size-change="getPosts"-->
+<!--            @current-change="getPosts"-->
+<!--        />-->
+<!--      </div>-->
     </el-card>
 
   </div>

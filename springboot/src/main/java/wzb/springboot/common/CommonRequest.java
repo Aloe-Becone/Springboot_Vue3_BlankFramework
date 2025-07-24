@@ -1,8 +1,6 @@
 package wzb.springboot.common;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 通用请求封装类

@@ -1,0 +1,83 @@
+/* 轮播图容器 */
+.carousel-item-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* 轮播图片样式 */
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* 图片悬停效果（可选） */
+.carousel-item-container:hover .carousel-image {
+    transform: scale(1.02);
+}
+
+/* 文字遮罩层 */
+.carousel-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 40px;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+    color: white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* 标题样式 */
+.carousel-title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+/* 描述文字样式 */
+.carousel-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 80%;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .carousel-title {
+        font-size: 1.5rem;
+    }
+    .carousel-description {
+        font-size: 1rem;
+        max-width: 100%;
+    }
+    .carousel-overlay {
+        padding: 20px;
+    }
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+
+.carousel-content h3 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.carousel-content p {
+    font-size: 16px;
+}
+
+
+.text-gray-500 {
+    color: var(--el-text-color-secondary);
+}
+
+.text-gray-600 {
+    color: var(--el-text-color-regular);
+}

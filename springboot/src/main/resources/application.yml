@@ -14,7 +14,9 @@ spring:
       max-request-size: 100MB
   web:
     resources:
-      static-locations: file:./files/
+      static-locations:
+        - file:./files/
+        - classpath:/static/
 
 server:
   tomcat:

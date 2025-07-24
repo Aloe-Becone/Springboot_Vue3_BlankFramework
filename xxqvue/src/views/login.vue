@@ -1,91 +1,93 @@
 <template>
-  <el-tabs v-model="activeTab" stretch class="login_panel">
-    <el-tab-pane label="登录" name="login">
-      <el-card style="margin-top: 20px;">
-        <el-form
-            ref="loginFormRef"
-            :model="loginForm"
-            :rules="loginRules"
-            label-width="auto"
-            label-position="top"
-        >
-          <el-form-item label="用户名" prop="username">
-            <el-input
-                v-model="loginForm.username"
-                placeholder="请输入用户名"
-                clearable
-            />
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input
-                v-model="loginForm.password"
-                placeholder="请输入密码"
-                type="password"
-                show-password
-                clearable
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button
-                type="primary"
-                :loading="loginLoading"
-                @click="submitLoginForm"
-            >
-              登录
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-tab-pane>
-
-    <el-tab-pane label="注册" name="register">
-      <el-card style="margin-top: 20px;">
-        <el-form
-            ref="registerFormRef"
-            :model="registerForm"
-            :rules="registerRules"
-            label-width="auto"
-            label-position="top"
-            status-icon
-        >
-          <el-form-item label="用户名" prop="username">
-            <el-input
-                v-model="registerForm.username"
-                placeholder="请输入用户名"
-                clearable
-            />
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input
-                v-model="registerForm.password"
-                placeholder="请输入密码"
-                type="password"
-                show-password
-                clearable
-            />
-          </el-form-item>
-          <el-form-item label="确认密码" prop="confirmPassword">
-            <el-input
-                v-model="registerForm.confirmPassword"
-                placeholder="请再次输入密码"
-                type="password"
-                show-password
-                clearable
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button
-                type="primary"
-                :loading="registerLoading"
-                @click="submitRegisterForm"
-            >
-              注册
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-    </el-tab-pane>
-  </el-tabs>
+  <div class="page-container">
+    <div class="blur-background"></div>
+    <el-tabs v-model="activeTab" stretch class="login_panel">
+      <el-tab-pane label="登录" name="login">
+        <el-card style="margin-top: 20px;">
+          <el-form
+              ref="loginFormRef"
+              :model="loginForm"
+              :rules="loginRules"
+              label-width="auto"
+              label-position="top"
+          >
+            <el-form-item label="用户名" prop="username">
+              <el-input
+                  v-model="loginForm.username"
+                  placeholder="请输入用户名"
+                  clearable
+              />
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input
+                  v-model="loginForm.password"
+                  placeholder="请输入密码"
+                  type="password"
+                  show-password
+                  clearable
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                  type="primary"
+                  :loading="loginLoading"
+                  @click="submitLoginForm"
+              >
+                登录
+              </el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-tab-pane>
+      <el-tab-pane label="注册" name="register">
+        <el-card style="margin-top: 20px;">
+          <el-form
+              ref="registerFormRef"
+              :model="registerForm"
+              :rules="registerRules"
+              label-width="auto"
+              label-position="top"
+              status-icon
+          >
+            <el-form-item label="用户名" prop="username">
+              <el-input
+                  v-model="registerForm.username"
+                  placeholder="请输入用户名"
+                  clearable
+              />
+            </el-form-item>
+            <el-form-item label="密码" prop="password">
+              <el-input
+                  v-model="registerForm.password"
+                  placeholder="请输入密码"
+                  type="password"
+                  show-password
+                  clearable
+              />
+            </el-form-item>
+            <el-form-item label="确认密码" prop="confirmPassword">
+              <el-input
+                  v-model="registerForm.confirmPassword"
+                  placeholder="请再次输入密码"
+                  type="password"
+                  show-password
+                  clearable
+              />
+            </el-form-item>
+            <el-form-item>
+              <el-button
+                  type="primary"
+                  :loading="registerLoading"
+                  @click="submitRegisterForm"
+              >
+                注册
+              </el-button>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
 </template>
 
 <script setup>
@@ -241,12 +243,47 @@ const submitRegisterForm = () => {
 .login_panel{
   width: 30%;
   height: 60%;
-  margin: 10% auto;
+  margin: 0 auto;
   background-color: #fff;
   border-radius: 5px;
 }
 
+.page-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.blur-background {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: url('http://localhost:9099/_NIK0757-1.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(5px);
+  z-index: -1;
+}
+
+.login_panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  min-width: 400px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 5px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1;
+}
+
+/* 调整卡片样式 */
 .el-card {
-  margin-top: 20px;
+  background-color: transparent;
+  border: none;
 }
 </style>
